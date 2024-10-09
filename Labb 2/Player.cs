@@ -1,27 +1,19 @@
 ﻿
-
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml.Linq;
-
 public class Player : LevelElement
 {
-   
-
     public string Name { get; set; }
     public int HP { get; set; }
 
-    public Dice PlayerAttackDice { get; set; }
-    public Dice PlayerDefenceDice { get; set; }
+    public Dice AttackDice { get; set; }
+    public Dice DefenceDice { get; set; }
 
     public Player(int x, int y) : base(x, y, '@', ConsoleColor.Yellow)
     {
         Name = "Player";
         HP = 100;
-        PlayerAttackDice = new Dice(2, 6, 2); // 2d6+2
-        PlayerDefenceDice = new Dice(2, 6, 0); // 2d6+0
+        AttackDice = new Dice(2, 6, 2); // 2d6+2
+        DefenceDice = new Dice(2, 6, 0); // 2d6+0
     }
-   
 
     public void Move(ConsoleKey key, List<LevelElement> elements)
     {
@@ -48,40 +40,6 @@ public class Player : LevelElement
                 break;
         }
 
-        LevelElement? enemyEncounter = elements.FirstOrDefault(e => e.X == newPositionX && e.Y == newPositionY && e is Enemy);
-        if (enemyEncounter is Enemy enemy)
-        {
-            int attackResult = PlayerAttackDice.Throw();
-            int defenceResult = enemy.enemyDefenceDice.Throw(); 
-            int playerDamage = attackResult - defenceResult;
-            if( playerDamage > 0)
-            {
-                enemy.EnemyTakeDamage(playerDamage);//enemy.HP -= damage;
-            }
-
-            int enemyAttackResult = enemy.enemyAttackDice.Throw();
-            int playerDefenceResult = PlayerDefenceDice.Throw();
-            int enemyDamage = enemyAttackResult - playerDefenceResult;
-            if (enemyDamage > 0)
-            {
-                this.HP -= enemyDamage;
-            }
-
-            Console.SetCursorPosition(0, 20);
-
-            Console.WriteLine($"Motståndaren HP = {enemy.HP}  Din HP = {this.HP}".PadRight(Console.BufferWidth));
-            if (enemy.HP <= 0)
-            {
-                enemy.HP = 0;
-                elements.Remove(enemy);
-                
-            }
-            else if (this.HP <= 0)
-            {
-                //Exit game!!!
-            }
-        }
-
         // Kontrollera om den nya positionen är giltig
         if (IsMoveAllowed(newPositionX, newPositionY, elements))
         {
@@ -96,6 +54,18 @@ public class Player : LevelElement
     // Metod för att kontrollera om rörelsen är giltig
     private bool IsMoveAllowed(int newPositionX, int newPositionY, List<LevelElement> elements)
     {
+
+        LevelElement? enemyEncounter = elements.FirstOrDefault(e => e.X == newPositionX && e.Y == newPositionY && e is Enemy);
+        if (enemyEncounter is Enemy enemy)
+        {
+            Attack(enemy, elements);
+            DefendFrom(enemy);
+
+            //UTSKRIFT
+            Console.SetCursorPosition(0, 20);
+            Console.WriteLine($"Motståndaren HP = {enemy.HP}  Din HP = {this.HP}".PadRight(Console.BufferWidth));
+        }
+
         // Kontrollera om den nya positionen är blockerad av ett objekt
         foreach (var element in elements)
         {
@@ -106,6 +76,43 @@ public class Player : LevelElement
         }
         //returnera true i motsats till false
         return true;
+    }
+
+    public void Attack(Enemy enemy, List<LevelElement> elements)
+    {
+        int attackResult = AttackDice.Throw();
+        int defenceResult = enemy.DefenceDice.Throw();
+        int damage = attackResult - defenceResult;
+        if (damage > 0)
+        {
+            enemy.TakeDamage(damage);//enemy.HP -= damage;
+        }
+        if (enemy.HP <= 0)
+        {
+            enemy.HP = 0;
+        }
+    }
+
+    public void DefendFrom(Enemy enemy)
+    {
+        int attackPoints = enemy.AttackDice.Throw();
+        int defencePoints = DefenceDice.Throw();
+        int damage = attackPoints - defencePoints;
+        if (damage > 0)
+        {
+            this.HP -= damage;
+        }
+        if (this.HP <= 0)
+        {
+            this.HP = 0;
+        }
+
+        //UTSKRIFT
+        if (this.HP > 0)
+        {
+            Console.SetCursorPosition(0, 20);
+            Console.WriteLine($"Råttan attackerar spelaren med {damage} Spelarens nuvarande HP: {this.HP}");
+        }
     }
 
 }

@@ -1,33 +1,26 @@
 ﻿
-
-
-using System;
-
 public abstract class Enemy : LevelElement
 {
     protected Enemy(int x, int y, char icon, ConsoleColor consoleColor) : base(x, y, icon, consoleColor)
     {
     }
-   
     public string Name { get; set; }
     public int HP { get; set; }
-    public Dice enemyAttackDice { get; set; }
-    public Dice enemyDefenceDice { get; set; }
+    public Dice AttackDice { get; set; }
+    public Dice DefenceDice { get; set; }
 
-    public void EnemyTakeDamage(int playerDamage)
+    public void TakeDamage(int playerDamage)
     {
         this.HP -= playerDamage;
-    }
-    
-    public void EnemyAttack(int enemyAttack)
-    {
-
+        if (this.HP < 0)
+        {
+            this.HP = 0;
+        }
     }
 
     // Metod för att kontrollera om rörelsen är giltig
     protected bool IsMoveAllowed(int newX, int newY, List<LevelElement> elements)
     {
-        // Kontrollera om den nya positionen är blockerad av ett objekt
         foreach (var element in elements)
         {
             if (element.X == newX && element.Y == newY)
@@ -56,6 +49,14 @@ public abstract class Enemy : LevelElement
 
     public abstract void Update(List<LevelElement> elements);
 }
+
+
+
+
+
+
+
+
 
 
 // lägger till funktionalitet som är specifik för fiender.

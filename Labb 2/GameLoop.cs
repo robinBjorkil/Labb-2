@@ -1,8 +1,6 @@
 ﻿
-
 public class GameLoop
 {
-
     private bool isRunning = true;  // Variabel för att hålla reda på om spelet ska fortsätta köras
     private LevelData levelData;  // Innehåller alla element i spelet (spelare, fiender, väggar)
 
@@ -11,7 +9,10 @@ public class GameLoop
         Console.CursorVisible = false;
         this.levelData = levelData;
     }
-
+    public void GameOver()
+    {
+        Console.WriteLine("YOU DIED!!! ");
+    }
     public void Run()
     {
         levelData.Draw();
@@ -23,6 +24,13 @@ public class GameLoop
                 element.Update(levelData.Elements);
             }
 
+            var deadEnemies = levelData.Elements.OfType<Enemy>().Where(e => e.HP <= 0).ToList();
+
+            foreach (var enemy in deadEnemies)
+            {
+                levelData.Elements.Remove(enemy);
+            }
+
             // Rita spelaren efter att dess position kan ha ändrats
             levelData.Player.Draw();
 
@@ -31,9 +39,14 @@ public class GameLoop
             levelData.Player.Move(key, levelData.Elements);
 
             // Escape-tangent för att avsluta spelet
-            if (key == ConsoleKey.Escape)
+            if (key == ConsoleKey.Escape || levelData.Player.HP <= 0)
             {
                 isRunning = false;  // Avslutar
+            }
+            if(levelData.Player.HP <= 0)
+            {
+                Console.Clear();
+                GameOver();
             }
         }
     }

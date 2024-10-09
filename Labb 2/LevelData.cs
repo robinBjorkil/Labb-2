@@ -1,19 +1,15 @@
-﻿//Skapa en klass “LevelData”
-using System.Xml.Linq;
-
+﻿
 public class LevelData
 {
-    //som har en private field “elements” av typ List<LevelElement>.
     private List<LevelElement> _elements;
     public string path = @"Levels\\Level1.txt";
-    //Denna ska även exponeras i form av en public readonly property “Elements”.
+
     public List<LevelElement> Elements
     {
         get
         {
             return _elements;
         }
-
     }
 
     public Player Player { get; set; }
@@ -23,8 +19,6 @@ public class LevelData
         _elements = new List<LevelElement>();
     }
 
-
-    ////Vidare har LevelData en metod, Load(string filename), som läser in data från filen man anger vid anrop.
     public void Load(string fileName)
     {
         List<string> linesFromLevel1 = File.ReadAllLines(fileName).ToList();

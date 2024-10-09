@@ -1,11 +1,8 @@
 ﻿
-
-
 public class Program
 {
     public static void Main(string[] args)
     {
-       
         // Skapa en instans av LevelData
         LevelData levelData = new LevelData();
 

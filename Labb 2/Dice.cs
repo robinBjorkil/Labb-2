@@ -1,6 +1,4 @@
 ﻿
-
-
 public class Dice
 {
     private int numberOfDice;
@@ -33,9 +31,6 @@ public class Dice
         return totalOfThrowDice;
     }
 
-    
-
-
     public override string ToString()
     {
         return $"{numberOfDice}d{sidesPerDice}+{modifier}";
@@ -53,17 +48,8 @@ public class Dice
 
 
 
-//statisk klass för Battle
-//public void Battle(Player player, Enemy enemy)
-//{
-//    while (player.HP > 0 && enemy.HP > 0)
-//    {
-//        // Spelaren attackerar
-//        int playerAttack = player.Attack();
-//        int enemyDefense = enemy.Defend();
+//Skriva ut
 
-//        int damageToEnemy = Math.Max(0, playerAttack - enemyDefense);
-//        enemy.HP -= damageToEnemy;
 
 //        Console.WriteLine($"Spelaren attackerade {enemy.Name} och gjorde {damageToEnemy} skada. {enemy.Name} HP: {enemy.HP}");
 
@@ -73,12 +59,6 @@ public class Dice
 //            break;
 //        }
 
-//        // Fienden motattack
-//        int enemyAttack = enemy.Attack();
-//        int playerDefense = player.Defend();
-
-//        int damageToPlayer = Math.Max(0, enemyAttack - playerDefense);
-//        player.HP -= damageToPlayer;
 
 //        Console.WriteLine($"{enemy.Name} attackerade spelaren och gjorde {damageToPlayer} skada. Spelarens HP: {player.HP}");
 
@@ -86,6 +66,4 @@ public class Dice
 //        {
 //            Console.WriteLine("Spelaren har dött!");
 //            break;
-//        }
-//    }
-//}
+

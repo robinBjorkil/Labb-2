@@ -1,7 +1,4 @@
 ﻿
-
-
-
 public abstract class LevelElement
 {
     public int X { get; set; }

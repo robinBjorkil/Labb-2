@@ -1,20 +1,14 @@
 ﻿
-
-using System;
-using System.Data;
-
-
-
 public class Rat : Enemy
 {
     public Rat(int x, int y) : base(x, y, 'r', ConsoleColor.Red)
     {
         Name = "Rat";
         HP = 10;
-        enemyAttackDice = new Dice(1, 6, 3); // 1d6+3
-        enemyDefenceDice = new Dice(1, 6, 1); // 1d6+1
+        AttackDice = new Dice(1, 6, 3); // 1d6+3
+        DefenceDice = new Dice(1, 6, 1); // 1d6+1
     }
-    
+
     public override void Update(List<LevelElement> elements)
     {
         ClearOldPosition();
@@ -48,23 +42,8 @@ public class Rat : Enemy
 
         if (playerEncounter is Player player)
         {
-            enemyAttackDice.Throw();
-            player.PlayerDefenceDice.Throw();
-
-            int enemyAttackResult = enemyAttackDice.Throw();
-            int playerDefenceResult = player.PlayerDefenceDice.Throw();
-            int enemyDamage = enemyAttackResult - playerDefenceResult;
-            
-            if (player.HP >0)
-            {
-                Console.SetCursorPosition(0, 20);
-                Console.WriteLine($"Råttan attackerar spelaren med {enemyDamage} Spelarens nuvarande HP: {player.HP -= enemyDamage}");
-            }
-
-            int playerAttackResult = player.PlayerAttackDice.Throw();
-            int defenceResult = enemyDefenceDice.Throw();
-            int playerDamage = playerAttackResult - defenceResult;
-            this.HP -= playerDamage;
+            player.DefendFrom(this);
+            player.Attack(this, elements);
         }
 
         // Använda IsMoveAllowed för att kontrollera och uppdatera positionen

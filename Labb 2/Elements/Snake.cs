@@ -1,5 +1,4 @@
 ﻿
-
 public class Snake : Enemy
 {
 
@@ -7,8 +6,8 @@ public class Snake : Enemy
     {
         Name = "Snake";
         HP = 25;
-        enemyAttackDice = new Dice(3, 4, 2); // 3d4+2
-        enemyDefenceDice = new Dice(1, 8, 5); // 1d8+5
+        AttackDice = new Dice(3, 4, 2); // 3d4+2
+        DefenceDice = new Dice(1, 8, 5); // 1d8+5
     }
     public override void Update(List<LevelElement> elements)
     {
@@ -67,19 +66,17 @@ public class Snake : Enemy
 
         if (playerEncounter is Player)
         {
-            
-            enemyDefenceDice.Throw();
+
+            DefenceDice.Throw();
             if (player.HP <= 0)
             {
                 elements.Remove(player);
 
             }
         }
-
-
         // Rita ormen på den nya positionen
         DrawNewPosition();
-    }   
+    }
 }
 
 
