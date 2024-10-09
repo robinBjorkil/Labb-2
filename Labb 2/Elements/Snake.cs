@@ -2,16 +2,84 @@
 
 public class Snake : Enemy
 {
-    public Snake(int x, int y) : base(x, y, 'r', ConsoleColor.Blue)
+
+    public Snake(int x, int y) : base(x, y, 's', ConsoleColor.Blue)
     {
         Name = "Snake";
-        HP = 25;//här väljer jag själv hur mycket health jag vill ha.
+        HP = 25;
+        enemyAttackDice = new Dice(3, 4, 2); // 3d4+2
+        enemyDefenceDice = new Dice(1, 8, 5); // 1d8+5
     }
-
-    public override void Update()
+    public override void Update(List<LevelElement> elements)
     {
-        throw new NotImplementedException();// detta ska bytas ut och betyder att jag inte skapat någon kod här.
-    }
+        // Rensa den gamla positionen först
+        ClearOldPosition();
+
+        // Hitta spelaren
+        Player player = elements.OfType<Player>().FirstOrDefault();
+
+        if (player == null)
+            return; // Om spelaren inte finns, avsluta metoden
+
+        // Beräkna avståndet till spelaren
+        int distanceToPlayerX = Math.Abs(player.X - X);
+        int distanceToPlayerY = Math.Abs(player.Y - Y);
+
+        // Om spelaren är mer än 2 rutor bort, stoppa ormen från att flytta sig
+        if (distanceToPlayerX > 2 || distanceToPlayerY > 2)
+        {
+            // Rita ormen på sin nuvarande position om den inte rör sig
+            DrawNewPosition();
+            return; // Ormen står stilla och gör ingenting
+        }
+
+        // Annars flytta ormen bort från spelaren
+        int newSnakePositionX = X;
+        int newSnakePositionY = Y;
+
+        // Rör ormen bort från spelaren i X-led
+        if (player.X < X) // Spelaren är till vänster
+        {
+            newSnakePositionX = X + 1; // Flytta höger
+        }
+        else if (player.X > X) // Spelaren är till höger
+        {
+            newSnakePositionX = X - 1; // Flytta vänster
+        }
+
+        // Rör ormen bort från spelaren i Y-led
+        if (player.Y < Y) // Spelaren är ovanför
+        {
+            newSnakePositionY = Y + 1; // Flytta ner
+        }
+        else if (player.Y > Y) // Spelaren är under
+        {
+            newSnakePositionY = Y - 1; // Flytta upp
+        }
+
+        // Kontrollera om rörelsen är tillåten
+        if (IsMoveAllowed(newSnakePositionX, newSnakePositionY, elements))
+        {
+            X = newSnakePositionX;
+            Y = newSnakePositionY;
+        }
+        LevelElement? playerEncounter = elements.FirstOrDefault(p => p.X == newSnakePositionX && p.Y == newSnakePositionY && p is Player);
+
+        if (playerEncounter is Player)
+        {
+            
+            enemyDefenceDice.Throw();
+            if (player.HP <= 0)
+            {
+                elements.Remove(player);
+
+            }
+        }
+
+
+        // Rita ormen på den nya positionen
+        DrawNewPosition();
+    }   
 }
 
 

@@ -1,6 +1,6 @@
 ﻿
 
-using System.Security.Cryptography.X509Certificates;
+
 
 public abstract class LevelElement
 {
@@ -8,6 +8,7 @@ public abstract class LevelElement
     public int Y { get; set; }
     protected char Icon { get; set; }
     protected ConsoleColor ForegroundColor { get; set; }
+
 
     public LevelElement(int x, int y, char icon, ConsoleColor consoleColor)
     {
@@ -19,21 +20,18 @@ public abstract class LevelElement
 
     }
 
-    public void Draw()
+    public void Clear()
+    {
+        Console.SetCursorPosition(X, Y);
+        Console.Write(' ');
+    }
+
+    public virtual void Draw()
     {
         Console.SetCursorPosition(X, Y);
         Console.ForegroundColor = ForegroundColor;
         Console.WriteLine(Icon);
         Console.ResetColor();
-
-        
-        
-
-        //Draw - metod(utan parametrar), som vi kan anropa för att rita ut ett LevelElement
-        //med rätt färg och tecken på rätt plats.
-        //Gör en konstuktor här
-        //Eller gör char override   
-
     }
 }
 
@@ -46,3 +44,8 @@ public abstract class LevelElement
 //(t.ex. kommer “Wall” använda #-tecknet), samt en ConsoleColor som lagrar vilken färg tecknet ska ritas med.
 //Den ska dessutom ha en publik Draw-metod (utan parametrar),
 //som vi kan anropa för att rita ut ett LevelElement med rätt färg och tecken på rätt plats.
+
+
+
+
+

@@ -1,20 +1,62 @@
 ﻿
 
 
+using System;
+
 public abstract class Enemy : LevelElement
 {
     protected Enemy(int x, int y, char icon, ConsoleColor consoleColor) : base(x, y, icon, consoleColor)
     {
     }
-
+   
     public string Name { get; set; }
     public int HP { get; set; }
-    public Dice AttackDice { get; set; }
-    public Dice DefenceDice { get; set; }
+    public Dice enemyAttackDice { get; set; }
+    public Dice enemyDefenceDice { get; set; }
 
-    public abstract void Update();
+    public void EnemyTakeDamage(int playerDamage)
+    {
+        this.HP -= playerDamage;
+    }
+    
+    public void EnemyAttack(int enemyAttack)
+    {
 
+    }
+
+    // Metod för att kontrollera om rörelsen är giltig
+    protected bool IsMoveAllowed(int newX, int newY, List<LevelElement> elements)
+    {
+        // Kontrollera om den nya positionen är blockerad av ett objekt
+        foreach (var element in elements)
+        {
+            if (element.X == newX && element.Y == newY)
+            {
+                return false; // Kollision med ett objekt
+            }
+        }
+        return true; // Ingen kollision, flytten är giltig
+    }
+
+    // Metod för att radera ikonen från den gamla positionen
+    protected void ClearOldPosition()
+    {
+        Console.SetCursorPosition(X, Y);
+        Console.Write(' '); // Ritar en tom yta på den gamla positionen
+    }
+
+    // Metod för att rita om sig själv på den nya positionen
+    protected void DrawNewPosition()
+    {
+        Console.SetCursorPosition(X, Y);
+        Console.ForegroundColor = this.ForegroundColor; // Använd önskad färg
+        Console.Write(Icon);
+        Console.ResetColor();
+    }
+
+    public abstract void Update(List<LevelElement> elements);
 }
+
 
 // lägger till funktionalitet som är specifik för fiender.
 

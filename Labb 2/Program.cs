@@ -1,29 +1,24 @@
 ﻿
 
-LevelData level = new LevelData();
-level.Load("level1.txt");
 
-foreach (LevelElement element in level.Elements)
+public class Program
 {
-    element.Draw();
+    public static void Main(string[] args)
+    {
+       
+        // Skapa en instans av LevelData
+        LevelData levelData = new LevelData();
 
+        // Ladda spelets nivådata (t.ex. spelare, fiender, väggar)
+        levelData.Load(levelData.path);
+
+        // Skapa en instans av GameLoop och skicka levelData till den
+        GameLoop gameLoop = new GameLoop(levelData);
+
+        // Starta spelets loop
+        gameLoop.Run();
+    }
 }
-//Rat rat = new Rat(3, 4);
-//Snake snake = new Snake(5, 6);
-//Wall wall = new Wall(4, 6);
-//rat.Draw();
-//snake.Draw();
-//wall.Draw();
 
-//Dice dice1 = new Dice();
 
-//Slutligen har vi klasserna “Rat” och “Snake” som initialiserar sina nedärvda properties med de unika
-//egenskaper som respektive fiende har, samt även implementerar Update-metoden på sina egna unika sätt.
-// Alla fiender ärver av klassen Enemy
-LevelData levelData = new LevelData();
-levelData.Load("Level1.txt");
 
-foreach (LevelElement element in levelData.Elements)
-{
-    element.Draw();
-}

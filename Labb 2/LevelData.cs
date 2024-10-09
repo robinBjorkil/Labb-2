@@ -1,52 +1,11 @@
-﻿
-//String line;
-//try
-//{
-//    //Pass the file path and file name to the StreamReader constructor
-//    StreamReader sr = new StreamReader("C:\\Sample.txt");
-//    //Read the first line of text
-//    line = sr.ReadLine();
-//    //Continue to read until you reach end of file
-//    while (line != null)
-//    {
-//        //write the line to console window
-//        Console.WriteLine(line);
-//        //Read the next line
-//        line = sr.ReadLine();
-//    }
-//    //close the file
-//    sr.Close();
-//    Console.ReadLine();
-//}
-//catch (Exception e)
-//{
-//    Console.WriteLine("Exception: " + e.Message);
-//}
-//finally
-//{
-//    Console.WriteLine("Executing finally block.");
-//}
+﻿//Skapa en klass “LevelData”
+using System.Xml.Linq;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Skapa en klass “LevelData”
 public class LevelData
 {
     //som har en private field “elements” av typ List<LevelElement>.
-    private List<LevelElement>_elements;
-
+    private List<LevelElement> _elements;
+    public string path = @"Levels\\Level1.txt";
     //Denna ska även exponeras i form av en public readonly property “Elements”.
     public List<LevelElement> Elements
     {
@@ -56,52 +15,56 @@ public class LevelData
         }
 
     }
+
+    public Player Player { get; set; }
+
+    public LevelData()
+    {
+        _elements = new List<LevelElement>();
+    }
+
+
     ////Vidare har LevelData en metod, Load(string filename), som läser in data från filen man anger vid anrop.
     public void Load(string fileName)
     {
+        List<string> linesFromLevel1 = File.ReadAllLines(fileName).ToList();
+
         _elements = new List<LevelElement>();
-        _elements.Add(new Rat(3, 4));
-        _elements.Add(new Rat(3, 4));
-        _elements.Add(new Snake(3, 4));
-        //Lös denna och Draw() sen ska hela banan läsas! 
-        // Load läser igenom textfilen tecken för tecken, och för varje tecken den hittar som är
-        //någon av #, r, eller s, så skapar den en ny instans av den klass som motsvarar tecknet och
-        //lägger till en referens till instansen på “elements”-listan.
-        //foreach (char c in Level1.txt)
+
+        for (int y = 0; y < linesFromLevel1.Count; y++)
         {
-            //Console.WriteLine(Level1[c]);
+            for (int x = 0; x < linesFromLevel1[y].Length; x++)
+            {
+                char currentChar = linesFromLevel1[y][x];
+
+                switch (currentChar)
+                {
+                    case '#':
+                        Elements.Add(new Wall(x, y));
+                        break;
+                    case 'r':
+                        Elements.Add(new Rat(x, y));
+                        break;
+                    case 's':
+                        Elements.Add(new Snake(x, y));
+                        break;
+                    case '@':
+                        Player = new Player(x, y);
+                        Elements.Add(Player);
+                        break;
+                }
+            }
         }
     }
 
+    public void Draw()
+    {
+        foreach (var element in Elements)
+        {
+            element.Draw();
+        }
+    }
 }
-
-
-
-
-
-
-
-
-////Console.WriteLine("*** StreamReader *******************");
-
-//using (StreamReader reader = new StreamReader("myfile.txt"))
-//{
-//    while (!reader.EndOfStream)
-//    {
-//        //Thread.Sleep(50);
-//        //Console.Write((char)reader.Read());
-
-//        //Thread.Sleep(200);
-//        Console.WriteLine(reader.ReadLine());
-//    }
-
-//    //Console.Write(reader.ReadToEnd());
-
-
-
-
-
-
 
 
 
