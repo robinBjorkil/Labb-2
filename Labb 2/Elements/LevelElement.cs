@@ -34,6 +34,8 @@ public abstract class LevelElement
 
 
 
+
+
 //Det ska finns en abstrakt basklass som jag valt att kalla “LevelElement”.
 //Eftersom den är abstrakt så kan man inte ha instanser av denna, utan den används för att
 //definiera basfunktionalitet som andra klasser sedan kan ärva.

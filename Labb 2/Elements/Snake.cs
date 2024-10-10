@@ -28,7 +28,7 @@ public class Snake : Enemy
         if (distanceToPlayerX > 2 || distanceToPlayerY > 2)
         {
             // Rita ormen på sin nuvarande position om den inte rör sig
-            DrawNewPosition();
+            //Draw();
             return; // Ormen står stilla och gör ingenting
         }
 
@@ -74,8 +74,7 @@ public class Snake : Enemy
 
             }
         }
-        // Rita ormen på den nya positionen
-        DrawNewPosition();
+        
     }
 }
 

@@ -1,4 +1,6 @@
 ﻿
+using System.Drawing;
+
 public class Player : LevelElement
 {
     public string Name { get; set; }
@@ -22,7 +24,7 @@ public class Player : LevelElement
         // Skapa int för att hänvisa nya positionen till X och Y
         int newPositionX = X;
         int newPositionY = Y;
-
+        
         // skapa switch med nya positioner
         switch (key)
         {
@@ -57,15 +59,11 @@ public class Player : LevelElement
 
         LevelElement? enemyEncounter = elements.FirstOrDefault(e => e.X == newPositionX && e.Y == newPositionY && e is Enemy);
         if (enemyEncounter is Enemy enemy)
-        {
+        {  
             Attack(enemy, elements);
             DefendFrom(enemy);
-
-            //UTSKRIFT
-            Console.SetCursorPosition(0, 20);
-            Console.WriteLine($"Motståndaren HP = {enemy.HP}  Din HP = {this.HP}".PadRight(Console.BufferWidth));
         }
-
+        
         // Kontrollera om den nya positionen är blockerad av ett objekt
         foreach (var element in elements)
         {
@@ -78,11 +76,16 @@ public class Player : LevelElement
         return true;
     }
 
-    public void Attack(Enemy enemy, List<LevelElement> elements)
+    public void Attack(Enemy enemy, List<LevelElement> elements, bool playerAttacksFirst = true)
     {
+
         int attackResult = AttackDice.Throw();
         int defenceResult = enemy.DefenceDice.Throw();
         int damage = attackResult - defenceResult;
+        if(damage < 0)
+        {
+            damage = 0;
+        }
         if (damage > 0)
         {
             enemy.TakeDamage(damage);//enemy.HP -= damage;
@@ -91,13 +94,30 @@ public class Player : LevelElement
         {
             enemy.HP = 0;
         }
+        // info playerattack
+        if(playerAttacksFirst = true)
+        {
+            Console.SetCursorPosition(0, 20);
+        }
+        else if(playerAttacksFirst = false)
+        {
+            Console.SetCursorPosition(0, 22);
+        }
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine($"{Name} (HP {HP}) attacks {enemy.Name}! Attack ({this.AttackDice}) = {attackResult} " +
+            $"{enemy.Name} (HP {enemy.HP}) Defence ({enemy.DefenceDice}) = {defenceResult} Total Attackpoäng = {damage}".PadRight(Console.BufferWidth));
+
     }
 
-    public void DefendFrom(Enemy enemy)
+    public void DefendFrom(Enemy enemy, bool playerAttackFirst = false)
     {
         int attackPoints = enemy.AttackDice.Throw();
         int defencePoints = DefenceDice.Throw();
         int damage = attackPoints - defencePoints;
+        if(damage < 0)
+        {
+            damage = 0;
+        }
         if (damage > 0)
         {
             this.HP -= damage;
@@ -107,12 +127,52 @@ public class Player : LevelElement
             this.HP = 0;
         }
 
-        //UTSKRIFT
-        if (this.HP > 0)
+        //info playerförsvar
+        if(playerAttackFirst = true)
+        {
+            Console.SetCursorPosition(0, 22);
+        }
+        else if (playerAttackFirst = false)
         {
             Console.SetCursorPosition(0, 20);
-            Console.WriteLine($"Råttan attackerar spelaren med {damage} Spelarens nuvarande HP: {this.HP}");
         }
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"{enemy.Name} (HP {enemy.HP}) attacks {Name}! Attack ({enemy.AttackDice}) = {attackPoints} " +
+            $"{Name} (HP {HP}) Defence ({DefenceDice}) = {defencePoints} Total Attackpäng = {damage}".PadRight(Console.BufferWidth));
+
+
+
+
+
     }
 
 }
+
+
+
+
+
+//if (this.HP > 0)
+//{
+
+
+//}
+
+//Skriva ut
+
+
+//        Console.WriteLine($"Spelaren attackerade {enemy.Name} och gjorde {damageToEnemy} skada. {enemy.Name} HP: {enemy.HP}");
+
+//        if (enemy.HP <= 0)
+//        {
+//            Console.WriteLine($"{enemy.Name} har dött!");
+//            break;
+//        }
+
+
+//        Console.WriteLine($"{enemy.Name} attackerade spelaren och gjorde {damageToPlayer} skada. Spelarens HP: {player.HP}");
+
+//        if (player.HP <= 0)
+//        {
+//            Console.WriteLine("Spelaren har dött!");
+//            break;

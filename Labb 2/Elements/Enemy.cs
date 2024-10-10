@@ -38,15 +38,6 @@ public abstract class Enemy : LevelElement
         Console.Write(' '); // Ritar en tom yta på den gamla positionen
     }
 
-    // Metod för att rita om sig själv på den nya positionen
-    protected void DrawNewPosition()
-    {
-        Console.SetCursorPosition(X, Y);
-        Console.ForegroundColor = this.ForegroundColor; // Använd önskad färg
-        Console.Write(Icon);
-        Console.ResetColor();
-    }
-
     public abstract void Update(List<LevelElement> elements);
 }
 

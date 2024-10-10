@@ -1,8 +1,8 @@
 ﻿
 public class GameLoop
 {
-    private bool isRunning = true;  // Variabel för att hålla reda på om spelet ska fortsätta köras
-    private LevelData levelData;  // Innehåller alla element i spelet (spelare, fiender, väggar)
+    private bool isRunning = true;
+    private LevelData levelData;
 
     public GameLoop(LevelData levelData)
     {
@@ -15,8 +15,6 @@ public class GameLoop
     }
     public void Run()
     {
-        levelData.Draw();
-
         while (isRunning)  // Sålänge spelet körs, isRunning är true.
         {
             foreach (var element in levelData.Elements.OfType<Enemy>())
@@ -30,6 +28,8 @@ public class GameLoop
             {
                 levelData.Elements.Remove(enemy);
             }
+
+            levelData.DrawElementsWithinRange(5);
 
             // Rita spelaren efter att dess position kan ha ändrats
             levelData.Player.Draw();
@@ -51,19 +51,17 @@ public class GameLoop
         }
     }
 
-
-
-    //visionrange
-    //public bool IsInVisionRange(Player player, LevelElement element)
-    //{
-    //    int distance = Math.Sqrt(Math.Pow(this.X - element.X, 2) + Math.Pow(this.Y - element.Y, 2));
-    //    return distance <= VisionRange;
-    //}
-
 }
-//Ansvarar för att:
 
-// 1. Lyssna på spelarens inmatning (t.ex. om spelaren trycker på en tangent för att flytta sig).
-// 2. Flytta spelaren eller fienderna baserat på deras beteenden.
-// 3. Uppdatera spelets grafik, så att spelaren ser vad som händer på skärmen.
-// 4. Kontrollera om spelet är över (t.ex. om spelaren har dött eller besegrat alla fiender).
+
+// FRÅGOR:
+/*
+ 
+Råttan stannar kvar trots att den har 0 i HP tills jag går på den?
+Om råttan har 0 och jag går ifrån den så är den kvar.
+
+
+
+
+ */
+ 

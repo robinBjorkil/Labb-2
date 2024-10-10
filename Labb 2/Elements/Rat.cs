@@ -53,7 +53,6 @@ public class Rat : Enemy
             Y = newRatPositionY;
         }
 
-        DrawNewPosition();
     }
 }
 

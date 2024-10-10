@@ -1,4 +1,6 @@
 ﻿
+using System.Xml.Linq;
+
 public class LevelData
 {
     private List<LevelElement> _elements;
@@ -49,15 +51,25 @@ public class LevelData
                 }
             }
         }
+        
     }
 
-    public void Draw()
+    public void DrawElementsWithinRange(int visionRange)
     {
         foreach (var element in Elements)
         {
-            element.Draw();
+            // Beräkna avståndet mellan spelaren och elementet
+            double distance = Math.Sqrt(Math.Pow(Player.X - element.X, 2) + Math.Pow(Player.Y - element.Y, 2));
+            
+            
+            if (distance <= visionRange)
+            {
+                
+                element.Draw();
+            }
         }
     }
+
 }
 
 
