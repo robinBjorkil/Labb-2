@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 public class Snake : Enemy
 {
 
@@ -62,18 +64,20 @@ public class Snake : Enemy
             X = newSnakePositionX;
             Y = newSnakePositionY;
         }
-        LevelElement? playerEncounter = elements.FirstOrDefault(p => p.X == newSnakePositionX && p.Y == newSnakePositionY && p is Player);
+        //LevelElement? playerEncounter = elements.FirstOrDefault(p => p.X == newSnakePositionX && p.Y == newSnakePositionY && p is Player);
 
-        if (playerEncounter is Player)
-        {
+        //if (playerEncounter is Player)
+        //{
+           
+         
 
-            DefenceDice.Throw();
-            if (player.HP <= 0)
-            {
-                elements.Remove(player);
+            //DefenceDice.Throw();
+            //if (player.HP <= 0)
+            //{
+            //    elements.Remove(player);
 
-            }
-        }
+            //}
+        //}
         
     }
 }

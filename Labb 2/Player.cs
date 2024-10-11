@@ -1,5 +1,6 @@
 ﻿
 using System.Drawing;
+using System.Xml.Linq;
 
 public class Player : LevelElement
 {
@@ -54,14 +55,14 @@ public class Player : LevelElement
     }
 
     // Metod för att kontrollera om rörelsen är giltig
-    private bool IsMoveAllowed(int newPositionX, int newPositionY, List<LevelElement> elements)
+    public bool IsMoveAllowed(int newPositionX, int newPositionY, List<LevelElement> elements)
     {
 
         LevelElement? enemyEncounter = elements.FirstOrDefault(e => e.X == newPositionX && e.Y == newPositionY && e is Enemy);
         if (enemyEncounter is Enemy enemy)
         {  
-            Attack(enemy, elements);
-            DefendFrom(enemy);
+            Attack(enemy, elements, true);
+            DefendFrom(enemy, true);
         }
         
         // Kontrollera om den nya positionen är blockerad av ett objekt
@@ -75,14 +76,14 @@ public class Player : LevelElement
         //returnera true i motsats till false
         return true;
     }
-
-    public void Attack(Enemy enemy, List<LevelElement> elements, bool playerAttacksFirst = true)
+    
+    public void Attack(Enemy enemy, List<LevelElement> elements, bool playerAttackingFirst)
     {
 
         int attackResult = AttackDice.Throw();
         int defenceResult = enemy.DefenceDice.Throw();
         int damage = attackResult - defenceResult;
-        if(damage < 0)
+        if (damage < 0)
         {
             damage = 0;
         }
@@ -95,26 +96,26 @@ public class Player : LevelElement
             enemy.HP = 0;
         }
         // info playerattack
-        if(playerAttacksFirst = true)
+        if (playerAttackingFirst == true)
         {
             Console.SetCursorPosition(0, 20);
         }
-        else if(playerAttacksFirst = false)
+        else
         {
-            Console.SetCursorPosition(0, 22);
+            Console.SetCursorPosition(0, 21);
         }
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine($"{Name} (HP {HP}) attacks {enemy.Name}! Attack ({this.AttackDice}) = {attackResult} " +
             $"{enemy.Name} (HP {enemy.HP}) Defence ({enemy.DefenceDice}) = {defenceResult} Total Attackpoäng = {damage}".PadRight(Console.BufferWidth));
 
     }
-
-    public void DefendFrom(Enemy enemy, bool playerAttackFirst = false)
+    
+    public void DefendFrom(Enemy enemy, bool playerAttackingFirst)
     {
         int attackPoints = enemy.AttackDice.Throw();
         int defencePoints = DefenceDice.Throw();
         int damage = attackPoints - defencePoints;
-        if(damage < 0)
+        if (damage < 0)
         {
             damage = 0;
         }
@@ -128,11 +129,12 @@ public class Player : LevelElement
         }
 
         //info playerförsvar
-        if(playerAttackFirst = true)
+        if (playerAttackingFirst == true)
         {
-            Console.SetCursorPosition(0, 22);
+           
+            Console.SetCursorPosition(0, 21);
         }
-        else if (playerAttackFirst = false)
+        else
         {
             Console.SetCursorPosition(0, 20);
         }
@@ -140,39 +142,6 @@ public class Player : LevelElement
         Console.WriteLine($"{enemy.Name} (HP {enemy.HP}) attacks {Name}! Attack ({enemy.AttackDice}) = {attackPoints} " +
             $"{Name} (HP {HP}) Defence ({DefenceDice}) = {defencePoints} Total Attackpäng = {damage}".PadRight(Console.BufferWidth));
 
-
-
-
-
     }
 
 }
-
-
-
-
-
-//if (this.HP > 0)
-//{
-
-
-//}
-
-//Skriva ut
-
-
-//        Console.WriteLine($"Spelaren attackerade {enemy.Name} och gjorde {damageToEnemy} skada. {enemy.Name} HP: {enemy.HP}");
-
-//        if (enemy.HP <= 0)
-//        {
-//            Console.WriteLine($"{enemy.Name} har dött!");
-//            break;
-//        }
-
-
-//        Console.WriteLine($"{enemy.Name} attackerade spelaren och gjorde {damageToPlayer} skada. Spelarens HP: {player.HP}");
-
-//        if (player.HP <= 0)
-//        {
-//            Console.WriteLine("Spelaren har dött!");
-//            break;

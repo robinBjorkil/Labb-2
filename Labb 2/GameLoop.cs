@@ -45,23 +45,10 @@ public class GameLoop
             }
             if(levelData.Player.HP <= 0)
             {
-                Console.Clear();
+                //Console.Clear();
                 GameOver();
             }
         }
     }
 
 }
-
-
-// FRÅGOR:
-/*
- 
-Råttan stannar kvar trots att den har 0 i HP tills jag går på den?
-Om råttan har 0 och jag går ifrån den så är den kvar.
-
-
-
-
- */
- 

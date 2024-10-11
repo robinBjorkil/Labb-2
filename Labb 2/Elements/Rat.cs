@@ -42,8 +42,9 @@ public class Rat : Enemy
 
         if (playerEncounter is Player player)
         {
-            player.DefendFrom(this);
-            player.Attack(this, elements);
+            player.DefendFrom(this, false);
+            player.Attack(this, elements, false);
+            
         }
 
         // Använda IsMoveAllowed för att kontrollera och uppdatera positionen
